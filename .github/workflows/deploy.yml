@@ -1,0 +1,21 @@
+name: Deploy Django
+
+on:
+
+  push:
+
+    branches:
+
+      - main
+
+jobs:
+
+  deploy:
+
+    runs-on: self-hosted
+
+    steps:
+
+      - name: Deploy on Ubuntu server
+
+        run: /home/jawad/deploy-study-hub.sh
