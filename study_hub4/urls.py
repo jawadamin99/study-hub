@@ -25,6 +25,7 @@ from students.views import (
     course_delete,
     course_list,
     course_update,
+    ProjectViewSet,
     project_create,
     project_delete,
     project_list,
@@ -34,21 +35,33 @@ from students.views import (
     subject_list,
     subject_update,
 )
-from tasks.views import TaskViewSet, task_create, task_delete, task_list, task_update
+from tasks.views import (
+    NotificationViewSet,
+    TaskViewSet,
+    notification_list,
+    notification_mark_read,
+    task_create,
+    task_delete,
+    task_list,
+    task_update,
+)
 from user_auth.views import UsersViewSet, MyTokenObtainPairView
 
 router = routers.DefaultRouter()
 router.register(r'users', UsersViewSet)
 router.register(r'tasks', TaskViewSet)
+router.register(r'notifications', NotificationViewSet)
+router.register(r'projects', ProjectViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('students.urls')),
-    path('api/', include(router.urls)),
     path('api/tasks_list/', task_list, name='task_list'),
     path('api/tasks/create/', task_create, name='task_create'),
     path('api/tasks/<int:pk>/update/', task_update, name='task_update'),
     path('api/tasks/<int:pk>/delete/', task_delete, name='task_delete'),
+    path('api/notifications_list/', notification_list, name='notification_list'),
+    path('api/notifications/<int:pk>/mark-read/', notification_mark_read, name='notification_mark_read'),
     path('api/projects_list/', project_list, name='project_list'),
     path('api/projects/create/', project_create, name='project_create'),
     path('api/projects/<int:pk>/update/', project_update, name='project_update'),
@@ -61,6 +74,7 @@ urlpatterns = [
     path('api/subjects/create/', subject_create, name='subject_create'),
     path('api/subjects/<int:pk>/update/', subject_update, name='subject_update'),
     path('api/subjects/<int:pk>/delete/', subject_delete, name='subject_delete'),
+    path('api/', include(router.urls)),
     path('login/', MyTokenObtainPairView.as_view()),
     path('refresh/', TokenRefreshView.as_view()),
     path('user_login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),

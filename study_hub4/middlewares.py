@@ -10,15 +10,21 @@ class RequestLoggingMiddleware:
     def __call__(self, request):
         start_time = time.time()
         response = self.get_response(request)
-        end_time = time.time() - start_time
-        print(f"METHOD: {request.method} PATH: {request.path} TOOK: ", end_time)
+        execution_time = time.time() - start_time
 
-        response_type = "ok"
-        if "/api/" in request.path.lower():
-            if end_time >= 0.5:
-                response_type = "slow"
-            RequestLog(user_id=request.user.id, method=request.method, path=request.path, execution_time=end_time,
-                       timestamp=time.time(), response_type=response_type
-                       ).save()
+        if request.path.startswith("/admin/"):
+            return response
+
+        response_type = "slow" if execution_time > 0.5 else "ok"
+        user = request.user if request.user.is_authenticated else None
+
+        RequestLog.objects.create(
+            user=user,
+            method=request.method,
+            path=request.path,
+            execution_time=execution_time,
+            status_code=response.status_code,
+            response_type=response_type,
+        )
 
         return response

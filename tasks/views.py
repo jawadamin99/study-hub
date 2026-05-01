@@ -4,9 +4,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from .forms import TaskForm
-from .models import Task
+from .models import Notification, Task
 from .permissions import IsManagerOrReadOnly
-from .serializers import TaskSerializer
+from .serializers import NotificationSerializer, TaskSerializer
 
 
 class TaskViewSet(ModelViewSet):
@@ -21,14 +21,31 @@ class TaskViewSet(ModelViewSet):
         return Task.objects.filter(assigned_to=user)
 
 
+class NotificationViewSet(ModelViewSet):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.groups.filter(name__in=("Manager", "Admin")).exists():
+            return Notification.objects.all()
+        return Notification.objects.filter(user=user)
+
+
 @login_required
 def task_list(request):
-    tasks = Task.objects.select_related("assigned_to", "created_by").all()
+    if request.user.groups.filter(name__in=("Manager", "Admin")).exists():
+        tasks = Task.objects.select_related("project", "assigned_to", "created_by").all()
+    else:
+        tasks = Task.objects.select_related("project", "assigned_to", "created_by").filter(assigned_to=request.user)
+
     rows = [
         {
             "cells": [
                 task.title,
                 task.description,
+                task.project.name if task.project else "No project",
                 task.assigned_to.email,
                 task.created_by.email,
                 "Active" if task.is_active else "Inactive",
@@ -44,12 +61,62 @@ def task_list(request):
         "eyebrow": "Task Board",
         "heading": "Tasks",
         "description": "Review task ownership, activity state, and who created each work item.",
-        "columns": ["Title", "Description", "Assigned To", "Created By", "Status"],
+        "columns": ["Title", "Description", "Project", "Assigned To", "Created By", "Status"],
         "rows": rows,
         "create_url": "task_create",
         "create_label": "Create Task",
     }
     return render(request, "resources/list.html", context)
+
+
+@login_required
+def notification_list(request):
+    if request.user.groups.filter(name__in=("Manager", "Admin")).exists():
+        notifications = Notification.objects.select_related("user", "task").all()
+    else:
+        notifications = Notification.objects.select_related("user", "task").filter(user=request.user)
+
+    rows = [
+        {
+            "cells": [
+                notification.message,
+                notification.task.title,
+                notification.user.email,
+                "Read" if notification.is_read else "Unread",
+                notification.created_on,
+            ],
+            "actions": [
+                {
+                    "label": "Mark read",
+                    "url": "notification_mark_read",
+                    "pk": notification.pk,
+                    "class": "",
+                }
+            ] if not notification.is_read else [],
+        }
+        for notification in notifications
+    ]
+    context = {
+        "page_title": "Notifications",
+        "eyebrow": "Inbox",
+        "heading": "Notifications",
+        "description": "Review task assignment and reassignment alerts.",
+        "columns": ["Message", "Task", "User", "Status", "Created"],
+        "rows": rows,
+    }
+    return render(request, "resources/list.html", context)
+
+
+@login_required
+def notification_mark_read(request, pk):
+    if request.user.groups.filter(name__in=("Manager", "Admin")).exists():
+        notification = get_object_or_404(Notification, pk=pk)
+    else:
+        notification = get_object_or_404(Notification, pk=pk, user=request.user)
+
+    notification.is_read = True
+    notification.save()
+    return redirect("notification_list")
 
 
 @login_required

@@ -33,3 +33,14 @@ def track_task_changes(sender, instance, **kwargs):
 
         if old_value != new_value:
             print(f"Task changed: {field} from {old_value} to {new_value}")
+
+    if old_task.is_active and not instance.is_active:
+        print(f"Task completed: {instance.title}")
+
+    if old_task.assigned_to != instance.assigned_to:
+        Notification.objects.create(
+            user=instance.assigned_to,
+            task=instance,
+            message=f"You have been assigned task: {instance.title}",
+        )
+        print(f"Task reassigned to: {instance.assigned_to.email}")

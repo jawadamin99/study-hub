@@ -241,6 +241,7 @@
             <nav class="top-nav" aria-label="Section links">
                 <a class="nav-link" href="{% url 'student_list' %}">Students</a>
                 <a class="nav-link" href="{% url 'task_list' %}">Tasks</a>
+                <a class="nav-link" href="{% url 'notification_list' %}">Notifications</a>
                 <a class="nav-link" href="{% url 'project_list' %}">Projects</a>
                 <a class="nav-link" href="{% url 'course_list' %}">Courses</a>
                 <a class="nav-link" href="{% url 'subject_list' %}">Subjects</a>
@@ -288,6 +289,9 @@
                                 {% if row.delete_url %}
                                     <a class="action-link delete" href="{% url row.delete_url row.pk %}">Delete</a>
                                 {% endif %}
+                                {% for action in row.actions %}
+                                    <a class="action-link {{ action.class }}" href="{% url action.url action.pk %}">{{ action.label }}</a>
+                                {% endfor %}
                             </div>
                         </td>
                     </tr>

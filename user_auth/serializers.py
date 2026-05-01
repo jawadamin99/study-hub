@@ -34,7 +34,8 @@ class UserSerializer(serializers.ModelSerializer):
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
+        group = self.user.groups.first()
         data['user_id'] = self.user.id
         data['email'] = self.user.email
-        data['group'] = self.user.groups.first().name
+        data['group'] = group.name if group else None
         return data

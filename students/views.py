@@ -7,7 +7,8 @@ from rest_framework.viewsets import ModelViewSet
 
 from .forms import StudentForm, ProjectForm, CourseForm, SubjectForm
 from .models import Student, Projects, Courses, Subjects
-from .serializers import StudentSerializer
+from .permissions import IsManagerOrAdminWriteOnly
+from .serializers import ProjectSerializer, StudentSerializer
 
 
 class StudentViewSet(ModelViewSet):
@@ -19,6 +20,12 @@ class StudentViewSet(ModelViewSet):
     search_fields = ['first_name', 'email']
     ordering_fields = ['id', 'first_name', 'email']
     ordering = ['id']
+
+
+class ProjectViewSet(ModelViewSet):
+    queryset = Projects.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = [IsManagerOrAdminWriteOnly]
 
 
 @login_required

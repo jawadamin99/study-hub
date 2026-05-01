@@ -67,6 +67,9 @@ class Projects(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='projects', on_delete=models.CASCADE, null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         db_table = "projects"
         permissions = [("can_publish_project", "Can publish project"),
