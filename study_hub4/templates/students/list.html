@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students List</title>
+    <style>
+        :root {
+            --bg: #f6f3ee;
+            --surface: rgba(255, 255, 255, 0.82);
+            --surface-strong: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --line: rgba(31, 41, 55, 0.1);
+            --primary: #0f766e;
+            --primary-dark: #115e59;
+            --accent: #c2410c;
+            --danger: #b91c1c;
+            --shadow: 0 18px 44px rgba(15, 23, 42, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text);
+            background: radial-gradient(circle at top left, rgba(15, 118, 110, 0.14), transparent 28%),
+            radial-gradient(circle at right, rgba(194, 65, 12, 0.12), transparent 26%),
+            linear-gradient(180deg, #faf7f2 0%, #f1ece4 100%);
+        }
+
+        .page {
+            width: min(1120px, calc(100% - 32px));
+            margin: 32px auto;
+            display: grid;
+            gap: 22px;
+        }
+
+        .hero,
+        .panel {
+            background: var(--surface);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(16px);
+        }
+
+        .hero {
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 18px;
+        }
+
+        .hero-copy {
+            display: grid;
+            gap: 14px;
+        }
+
+        .top-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 38px;
+            padding: 0 14px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            background: rgba(15, 118, 110, 0.08);
+            border: 1px solid rgba(15, 118, 110, 0.14);
+        }
+
+        .eyebrow {
+            display: inline-block;
+            margin-bottom: 10px;
+            color: var(--primary);
+            font-size: 0.82rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: clamp(2rem, 3vw, 3rem);
+            line-height: 1;
+        }
+
+        .hero p {
+            margin: 0;
+            color: var(--muted);
+            max-width: 56ch;
+            line-height: 1.6;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .actions form {
+            margin: 0;
+        }
+
+        a,
+        button,
+        input[type="submit"] {
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 46px;
+            padding: 0 18px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+
+        .button-primary {
+            background: linear-gradient(135deg, var(--primary), #14b8a6);
+            color: #fff;
+            box-shadow: 0 12px 22px rgba(15, 118, 110, 0.2);
+        }
+
+        .button-secondary {
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--text);
+            border-color: var(--line);
+        }
+
+        .button:hover,
+        button:hover,
+        input[type="submit"]:hover {
+            transform: translateY(-1px);
+        }
+
+        .panel {
+            padding: 24px;
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr auto;
+            gap: 14px;
+            align-items: end;
+        }
+
+        .field {
+            display: grid;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            min-height: 48px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 1px solid var(--line);
+            background: var(--surface-strong);
+            font: inherit;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: rgba(15, 118, 110, 0.5);
+            box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);
+        }
+
+        input[type="submit"] {
+            min-height: 48px;
+            padding: 0 20px;
+            border: 0;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent), #ea580c);
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 14px 24px rgba(194, 65, 12, 0.18);
+        }
+
+        .list-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .list-head h2 {
+            margin: 0;
+            font-size: 1.35rem;
+        }
+
+        .count {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .student-table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 18px;
+        }
+
+        .student-table th,
+        .student-table td {
+            padding: 16px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .student-table th {
+            color: var(--muted);
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .student-table tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .student-name {
+            font-weight: 700;
+        }
+
+        .row-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .action-link {
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .action-link.edit {
+            color: var(--primary-dark);
+        }
+
+        .action-link.delete {
+            color: var(--danger);
+        }
+
+        .empty-state {
+            padding: 30px 18px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        @media (max-width: 780px) {
+            .hero,
+            .list-head {
+                flex-direction: column;
+                align-items: start;
+            }
+
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            .student-table,
+            .student-table tbody,
+            .student-table tr,
+            .student-table td {
+                display: block;
+                width: 100%;
+            }
+
+            .student-table thead {
+                display: none;
+            }
+
+            .student-table tr {
+                padding: 16px;
+                border-bottom: 1px solid var(--line);
+            }
+
+            .student-table td {
+                padding: 8px 0;
+                border: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<main class="page">
+    <section class="hero">
+        <div class="hero-copy">
+            <nav class="top-nav" aria-label="Section links">
+                <a class="nav-link" href="{% url 'student_list' %}">Students</a>
+                <a class="nav-link" href="{% url 'task_list' %}">Tasks</a>
+                <a class="nav-link" href="{% url 'project_list' %}">Projects</a>
+                <a class="nav-link" href="{% url 'course_list' %}">Courses</a>
+                <a class="nav-link" href="{% url 'subject_list' %}">Subjects</a>
+            </nav>
+            <div>
+                <span class="eyebrow">Student Directory</span>
+                <h1>Students</h1>
+                <p>Search, review, and update student records from a single, cleaner workspace.</p>
+            </div>
+        </div>
+        <div class="actions">
+            <a class="button button-primary" href="{% url 'student_create' %}">Create Student</a>
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button class="button button-secondary" type="submit">Logout</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="panel">
+        <form class="search-form" method="GET">
+            <div class="field">
+                <label for="search">Search by name</label>
+                <input id="search" type="text" name="search" placeholder="Enter student name"
+                       value="{{ request.GET.search }}">
+            </div>
+            <div class="field">
+                <label for="age">Filter by age</label>
+                <input id="age" type="number" name="age" placeholder="Enter age" value="{{ request.GET.age }}">
+            </div>
+            <input type="submit" value="Search">
+        </form>
+    </section>
+
+    <section class="panel">
+        <div class="list-head">
+            <h2>Student Records</h2>
+            <span class="count">{{ students|length }} result{{ students|length|pluralize }}</span>
+        </div>
+
+        <table class="student-table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for student in students %}
+            <tr>
+                <td class="student-name">{{ student.first_name }} {{ student.last_name}}</td>
+                <td>{{ student.age }}</td>
+                <td>{{ student.email }}</td>
+                <td>
+                    <div class="row-actions">
+                        <a class="action-link edit" href="{% url 'student_update' student.id %}">Edit</a>
+                        <a class="action-link delete" href="{% url 'student_delete' student.id %}">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" class="empty-state">No students matched your current search.</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</main>
+</body>
+</html>

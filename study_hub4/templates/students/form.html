@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Form</title>
+    <style>
+        :root {
+            --bg: #f7f3eb;
+            --panel: rgba(255, 255, 255, 0.86);
+            --text: #1f2937;
+            --muted: #6b7280;
+            --line: rgba(31, 41, 55, 0.12);
+            --primary: #0f766e;
+            --accent: #c2410c;
+            --shadow: 0 24px 52px rgba(15, 23, 42, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(15, 118, 110, 0.16), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(194, 65, 12, 0.14), transparent 28%),
+                linear-gradient(180deg, #faf6f0 0%, #f2ebe2 100%);
+            padding: 32px 16px;
+        }
+
+        .page {
+            width: min(760px, 100%);
+            margin: 0 auto;
+        }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(18px);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 32px 32px 18px;
+            border-bottom: 1px solid rgba(31, 41, 55, 0.08);
+        }
+
+        .top-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 38px;
+            padding: 0 14px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--primary);
+            background: rgba(15, 118, 110, 0.08);
+            border: 1px solid rgba(15, 118, 110, 0.14);
+        }
+
+        .eyebrow {
+            display: inline-block;
+            color: var(--primary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: clamp(2rem, 3vw, 2.8rem);
+            line-height: 1;
+        }
+
+        .panel-header p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.6;
+            max-width: 46ch;
+        }
+
+        .panel-body {
+            padding: 28px 32px 32px;
+        }
+
+        form {
+            display: grid;
+            gap: 18px;
+        }
+
+        form p {
+            margin: 0;
+            display: grid;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.96);
+            color: var(--text);
+            font: inherit;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: rgba(15, 118, 110, 0.55);
+            box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .button,
+        input[type="submit"] {
+            min-height: 48px;
+            padding: 0 20px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input[type="submit"] {
+            border: 0;
+            background: linear-gradient(135deg, var(--accent), #ea580c);
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 14px 26px rgba(194, 65, 12, 0.18);
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--text);
+        }
+
+        .button:hover,
+        input[type="submit"]:hover {
+            transform: translateY(-1px);
+        }
+
+        ul.errorlist {
+            margin: 0;
+            padding: 12px 14px 12px 36px;
+            border-radius: 14px;
+            background: rgba(190, 24, 24, 0.08);
+            color: #991b1b;
+        }
+
+        @media (max-width: 640px) {
+            .panel-header,
+            .panel-body {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<main class="page">
+    <section class="panel">
+        <header class="panel-header">
+            <nav class="top-nav" aria-label="Section links">
+                <a class="nav-link" href="{% url 'student_list' %}">Students</a>
+                <a class="nav-link" href="{% url 'task_list' %}">Tasks</a>
+                <a class="nav-link" href="{% url 'project_list' %}">Projects</a>
+                <a class="nav-link" href="{% url 'course_list' %}">Courses</a>
+                <a class="nav-link" href="{% url 'subject_list' %}">Subjects</a>
+            </nav>
+            <span class="eyebrow">Student Editor</span>
+            <h1>Student Form</h1>
+            <p>Create a new record or update an existing one with a cleaner, easier-to-scan form layout.</p>
+        </header>
+
+        <div class="panel-body">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="actions">
+                    <input type="submit" value="Submit">
+                    <a class="button" href="{% url 'student_list' %}">Back to Students</a>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        :root {
+            --bg: #f4ede1;
+            --panel: rgba(255, 252, 247, 0.9);
+            --text: #1f2937;
+            --muted: #6b7280;
+            --accent: #bf5a36;
+            --accent-dark: #8c3e24;
+            --line: rgba(31, 41, 55, 0.12);
+            --shadow: 0 24px 60px rgba(78, 55, 36, 0.18);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(191, 90, 54, 0.22), transparent 34%),
+                radial-gradient(circle at bottom right, rgba(111, 145, 111, 0.2), transparent 30%),
+                linear-gradient(135deg, #f7efe4 0%, #efe6d8 100%);
+            display: grid;
+            place-items: center;
+            padding: 24px;
+        }
+
+        .login-shell {
+            width: min(100%, 980px);
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            background: var(--panel);
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(18px);
+        }
+
+        .brand-panel {
+            padding: 56px;
+            background:
+                linear-gradient(160deg, rgba(31, 41, 55, 0.94), rgba(58, 36, 26, 0.9)),
+                #1f2937;
+            color: #fff9f3;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 28px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            width: fit-content;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(255, 255, 255, 0.08);
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 18px 0 12px;
+            font-size: clamp(2.4rem, 4vw, 4rem);
+            line-height: 0.95;
+        }
+
+        .brand-panel p {
+            margin: 0;
+            max-width: 34ch;
+            color: rgba(255, 249, 243, 0.8);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .brand-notes {
+            display: grid;
+            gap: 12px;
+        }
+
+        .brand-notes span {
+            display: block;
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .form-panel {
+            padding: 56px 42px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-panel h2 {
+            margin: 0 0 10px;
+            font-size: 2rem;
+        }
+
+        .form-panel .intro {
+            margin: 0 0 28px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        form {
+            display: grid;
+            gap: 18px;
+        }
+
+        form p {
+            margin: 0;
+            display: grid;
+            gap: 8px;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text);
+            font: inherit;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: rgba(191, 90, 54, 0.7);
+            box-shadow: 0 0 0 4px rgba(191, 90, 54, 0.14);
+            transform: translateY(-1px);
+        }
+
+        input[type="submit"] {
+            border: 0;
+            background: linear-gradient(135deg, var(--accent), #d57c52);
+            color: #fff;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            box-shadow: 0 16px 28px rgba(191, 90, 54, 0.28);
+        }
+
+        input[type="submit"]:hover {
+            background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+        }
+
+        ul.errorlist {
+            margin: 0;
+            padding: 12px 14px 12px 36px;
+            border-radius: 14px;
+            background: rgba(190, 24, 24, 0.08);
+            color: #991b1b;
+        }
+
+        @media (max-width: 860px) {
+            .login-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .brand-panel,
+            .form-panel {
+                padding: 32px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+<main class="login-shell">
+    <section class="brand-panel">
+        <div>
+            <span class="eyebrow">Student Hub</span>
+            <h1>Manage students with less friction.</h1>
+            <p>Access your dashboard, search records quickly, and keep student data organized from one clean workspace.</p>
+        </div>
+        <div class="brand-notes">
+            <span>Quick access to student records and search tools.</span>
+            <span>Simple create and update flow for everyday admin work.</span>
+        </div>
+    </section>
+
+    <section class="form-panel">
+        <h2>Sign in</h2>
+        <p class="intro">Use your account credentials to continue to the student management dashboard.</p>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Login">
+        </form>
+    </section>
+</main>
+</body>
+</html>
