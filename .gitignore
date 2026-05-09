@@ -6,4 +6,5 @@ __pycache__/
 db.sqlite3
 .DS_Store
 .idea/
-gcp_service_account.json
+config/gcp_service_account.json
+tmp/
