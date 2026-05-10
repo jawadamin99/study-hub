@@ -1,0 +1,6 @@
+runtime: python312
+entrypoint: gunicorn -b :$PORT study_hub4.wsgi
+env_variables:
+  DJANGO_SETTINGS_MODULE: "study_hub4.settings"
+beta_settings:
+  cloud_sql_instances: django-practice-495208:us-central1:studyhub5
