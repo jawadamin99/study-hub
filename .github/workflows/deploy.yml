@@ -4,8 +4,22 @@ on:
     branches:
       - main
 jobs:
-  deploy:
+  deploy-vps:
     runs-on: self-hosted
     steps:
       - name: Deploy on Ubuntu server
         run: sudo -n /home/jawad/deploy-study-hub.sh
+  deploy-gcloud:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Auth to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      - name: Deploy to App Engine
+        uses: google-github-actions/deploy-appengine@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          deliverables: app.yaml
