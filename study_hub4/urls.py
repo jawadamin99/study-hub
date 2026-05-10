@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
+from django.views.generic import RedirectView
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenRefreshView
 
@@ -54,6 +55,7 @@ router.register(r'notifications', NotificationViewSet)
 router.register(r'projects', ProjectViewSet)
 
 urlpatterns = [
+    path('', RedirectView.as_view(url='/api/students_list/', permanent=False)),
     path('admin/', admin.site.urls),
     path('api/', include('students.urls')),
     path('api/tasks_list/', task_list, name='task_list'),
