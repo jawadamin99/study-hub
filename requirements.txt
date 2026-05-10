@@ -8,3 +8,4 @@ Pillow
 mysqlclient==2.2.8
 google-cloud-storage
 google-cloud-bigquery
+gunicorn
