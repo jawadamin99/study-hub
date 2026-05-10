@@ -18,6 +18,19 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
+      - name: Create .env for App Engine
+        run: |
+          cat > .env <<EOF
+          DB_NAME=${{ secrets.DB_NAME }}
+          DB_USER=${{ secrets.DB_USER }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          DB_HOST=/cloudsql/django-practice-495208:us-central1:studyhub5
+          DB_PORT=3306
+          SECRET_KEY=${{ secrets.SECRET_KEY }}
+          DEBUG=False
+          ALLOWED_HOSTS=.appspot.com,django-practice-495208.el.r.appspot.com,django.jawadamin.com,localhost,127.0.0.1
+          BUCKET_NAME=study_hub4
+          EOF
       - name: Deploy to App Engine
         uses: google-github-actions/deploy-appengine@v2
         with:
