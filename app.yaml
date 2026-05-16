@@ -1,8 +1,11 @@
+service: django-study-hub
 runtime: python312
 entrypoint: gunicorn -b :$PORT study_hub4.wsgi
 env_variables:
   DJANGO_SETTINGS_MODULE: "study_hub4.settings"
 automatic_scaling:
   max_instances: 3
+  target_cpu_utilization: 0.8
+  max_concurrent_requests: 50
 beta_settings:
   cloud_sql_instances: django-practice-495208:us-central1:studyhub5
